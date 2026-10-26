@@ -1,0 +1,223 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Detector de Mentiras</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e8eef5;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .jogo {
+            background-color: white;
+            max-width: 650px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px #0002;
+        }
+
+        h1 {
+            color: #263c60;
+        }
+
+        .cenario {
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .cenario img {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .balao {
+            position: relative;
+            background-color: #fff3c4;
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 12px;
+            width: 65%;
+            margin: 0 auto;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        select {
+            padding: 12px;
+            width: 220px;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin: 10px;
+            background-color: #263c60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #12c332;
+        }
+
+        #resultado {
+            margin-top: 20px;
+        }
+
+        #reiniciar {
+            display: none;
+            background-color: #ff0000;
+        }
+
+        #reiniciar:hover {
+            background-color: #ff1500;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="jogo">
+
+        <h1>Detector de Mentiras</h1>
+        <p>Responda às perguntas da investigação!</p>
+
+        <div class="cenario">
+
+            <div class="balao" id="pergunta">
+                Vamos começar o interrogatório?
+            </div>
+
+            <img src="interrogatorio.jpg" alt="Interrogatório">
+
+        </div>
+
+        <h3 id="numero">Pergunta 1 de 10</h3>
+
+        <select id="resposta">
+            <option value="">Selecione sua resposta</option>
+            <option value="sim">Sim</option>
+            <option value="nao">Não</option>
+        </select>
+
+        <br>
+
+        <button id="botaoResponder" onclick="responder()">
+            Confirmar
+        </button>
+
+        <h2 id="resultado"></h2>
+
+        <button id="reiniciar" onclick="reiniciarJogo()">
+            Reiniciar
+        </button>
+
+    </div>
+
+    <script>
+        let perguntas = [
+            "Conhece a vítima?",
+            "Telefonou para a vítima?",
+            "Mora perto da vítima?",
+            "Esteve no local da ocorrência?",
+            "Teve contato com a vítima horas antes do crime?",
+            "Tem algum impasse mal resolvido com a vítima?",
+            "Você já foi indiciado anteriormente?",
+            "Você tem porte de arma?",
+            "Você fazia parte do ciclo social próximo à vítima?",
+            "Você agrediria ou já agrediu a vítima?"
+        ];
+
+        let respostas = [];
+        let atual = 0;
+
+        mostrarPergunta();
+
+        function mostrarPergunta() {
+            document.getElementById("pergunta").innerHTML =
+                perguntas[atual];
+
+            document.getElementById("numero").innerHTML =
+                "Pergunta " + (atual + 1) + " de " + perguntas.length;
+        }
+
+        function responder() {
+            let resposta = document.getElementById("resposta").value;
+
+            if (resposta == "") {
+                alert("Escolha uma resposta!");
+                return;
+            }
+
+            respostas[atual] = resposta;
+            atual++;
+
+            document.getElementById("resposta").value = "";
+
+            if (atual < perguntas.length) {
+                mostrarPergunta();
+            } else {
+                resultado();
+            }
+        }
+
+        function resultado() {
+            let numS = 0;
+
+            for (let i = 0; i < 10; i++) {
+                if (respostas[i] == "sim") {
+                    numS++;
+                }
+            }
+
+            let mensagem = "";
+
+            if (numS < 5) {
+                mensagem = "Inocente";
+            } else if (numS == 5) {
+                mensagem = "Suspeito.";
+            } else if (numS <= 8) {
+                mensagem = "Cúmplice.";
+            } else {
+                mensagem = "Culpado.";
+            }
+
+            document.getElementById("pergunta").innerHTML =
+                mensagem;
+
+            document.getElementById("numero").innerHTML =
+                "Fim do interrogatório";
+
+            document.getElementById("resultado").innerHTML =
+                "Total de respostas sim: " + numS + " de 10.";
+
+            document.getElementById("resposta").style.display = "none";
+
+            document.getElementById("botaoResponder").style.display =
+                "none";
+
+            document.getElementById("reiniciar").style.display =
+                "inline-block";
+        }
+
+        function reiniciarJogo() {
+            location.reload();
+        }
+    </script>
+
+</body>
+</html>
+```
